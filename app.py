@@ -14,19 +14,19 @@ app.static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'st
 
 
 # 绑定配置
-# app.config.from_object(config)
+app.config.from_object(config)
 
 # 优先使用Vercel环境变量
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', config.SQLALCHEMY_DATABASE_URI)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', config.SECRET_KEY)
-app.config['MAIL_*'] = {  # 邮件配置也使用环境变量
-    'MAIL_SERVER': os.environ.get('MAIL_SERVER', config.MAIL_SERVER),
-    'MAIL_USE_SSL': os.environ.get('MAIL_USE_SSL', config.MAIL_USE_SSL),
-    'MAIL_PORT': os.environ.get('MAIL_PORT', config.MAIL_PORT),
-    'MAIL_USERNAME': os.environ.get('MAIL_USERNAME', config.MAIL_USERNAME),
-    'MAIL_PASSWORD': os.environ.get('MAIL_PASSWORD', config.MAIL_PASSWORD),
-    'MAIL_DEFAULT_SENDER': os.environ.get('MAIL_DEFAULT_SENDER', config.MAIL_DEFAULT_SENDER),
-}
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', config.SQLALCHEMY_DATABASE_URI)
+# app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', config.SECRET_KEY)
+# app.config['MAIL_*'] = {  # 邮件配置也使用环境变量
+#     'MAIL_SERVER': os.environ.get('MAIL_SERVER', config.MAIL_SERVER),
+#     'MAIL_USE_SSL': os.environ.get('MAIL_USE_SSL', config.MAIL_USE_SSL),
+#     'MAIL_PORT': os.environ.get('MAIL_PORT', config.MAIL_PORT),
+#     'MAIL_USERNAME': os.environ.get('MAIL_USERNAME', config.MAIL_USERNAME),
+#     'MAIL_PASSWORD': os.environ.get('MAIL_PASSWORD', config.MAIL_PASSWORD),
+#     'MAIL_DEFAULT_SENDER': os.environ.get('MAIL_DEFAULT_SENDER', config.MAIL_DEFAULT_SENDER),
+# }
 
 
 db.init_app(app)
@@ -54,11 +54,20 @@ def my_before_request():
 def my_context_processor():
     return {"user": g.user}
 
-# Vercel特定入口函数
+
+# Vercel WSGI 处理函数
 def vercel_handler(request):
-    with app.app_context():
-        response = app.full_dispatch_request(request)
-    return response
+    from flask import Response
+    from .app import app as flask_app
+
+    with flask_app.app_context():
+        response = flask_app.full_dispatch_request(request)
+        return Response(
+            response=response.data,
+            status=response.status_code,
+            headers=dict(response.headers)
+        )
+
 
 @app.route('/debug')
 def debug():

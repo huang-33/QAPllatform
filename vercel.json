@@ -1,28 +1,31 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "app.py",
       "use": "@vercel/python",
       "config": {
-        "runtime": "python3.8"
+        "runtime": "python3.9",
+        "wsgi": {
+          "app": "app.app"
+        }
       }
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "app.py"
     }
   ],
-  "env": {
-    "DATABASE_URL": "mysql+pymysql://root:root@127.0.0.1:3306/QAPlatform?charset=utf8mb4",
-    "SECRET_KEY": "binglianshang",
-    "MAIL_SERVER": "smtp.qq.com",
-    "MAIL_USE_SSL": true,
-    "MAIL_PORT": "465",
-    "MAIL_USERNAME": "2213713266@qq.com",
-    "MAIL_PASSWORD": "ltcqibyristidjbj",
-    "MAIL_DEFAULT_SENDER": "2213713266@qq.com",
-    "FLASK_ENV": "production"
+  "build": {
+    "env": {
+      "FLASK_APP": "app.py",
+      "PYTHON_VERSION": "3.9"
+    }
   }
 }
