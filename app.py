@@ -7,6 +7,9 @@ from blueprints.auth import bp as auth_bp
 from flask_migrate import Migrate
 
 app = Flask(__name__)
+# 明确指定模板目录
+app.template_folder = 'templates'
+
 # 绑定配置未见
 app.config.from_object(config)
 
