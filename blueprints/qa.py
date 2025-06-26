@@ -15,8 +15,14 @@ bp = Blueprint("qa",__name__,url_prefix="/")
 # http://127.0.0.1:5000
 @bp.route("/")
 def index():
-    questions = QuestionModel.query.order_by(QuestionModel.create_time.desc()).all()
-    return render_template("index.html",questions=questions)
+    # questions = QuestionModel.query.order_by(QuestionModel.create_time.desc()).all()
+    # return render_template("index.html",questions=questions)
+    with db.session() as session:  # 确保在请求上下文中使用会话
+        questions = session.query(QuestionModel).order_by(
+            QuestionModel.create_time.desc()
+        ).all()
+    return render_template("index.html", questions=questions)
+
 
 @bp.route("/qa/public",methods=["GET","POST"])
 @login_required

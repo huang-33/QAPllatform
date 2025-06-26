@@ -3,3 +3,6 @@ Flask-Mail==0.10.0
 Flask-Migrate==4.1.0
 Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.1
+mysqlclient==2.2.1  # 需要MySQL驱动
+pymysql==1.1.0
+gunicorn==21.2.0    # Vercel推荐的生产级WSGI服务器
