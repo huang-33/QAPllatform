@@ -1,0 +1,25 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="1">
+            <item index="0" class="java.lang.String" itemvalue="Django" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="高级技巧.单例模式.test.str_tools_py" />
+          <option value="ATM项目.run.*" />
+          <option value="ATM项目.DB.db_handle.config" />
+          <option value="DouBan.items" />
+          <option value="爬虫.exercise.python项目文件" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
