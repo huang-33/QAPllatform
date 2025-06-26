@@ -4,7 +4,12 @@
       "src": "app.py",
       "use": "@vercel/python",
       "config": {
-        "runtime": "python3.8"
+        "runtime": "python3.8",
+        "includeFiles": [
+          "templates/**",
+          "static/**",
+          "blueprints/**"
+        ]
       }
     }
   ],

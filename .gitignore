@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py,cover
+.mypy_cache/
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+
+# SQLite databases
+*.sqlite3
+*.db
+*.db-journal
+
+# Vercel specific
+.vercel/
+.vercel_build_output/
+.next
+.cache
+
+# Log files
+*.log
+*.log.*
+
+# Build assets
+dist/
+build/
+*.egg-info/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+__pypackages__/
+
+# Migrations (选择一项)
+## 选项1: 完全忽略迁移目录
+migrations/
+
+## 选项2: 保留迁移文件但忽略版本号
+# migrations/versions/
+# alembic.ini
+
+# Static files cache
+.webassets-cache
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Config files (如果有敏感数据)
+config.py
+local_config.py
+config_dev.py
+
+# Package manager specific
+Pipfile
+Pipfile.lock
+poetry.lock
+pyproject.toml
+.pdm.toml
+
+# Other
+*~
+.\#*
+/.coverage
+/coverage.xml
+/.tox/
