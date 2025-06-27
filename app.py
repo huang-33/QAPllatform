@@ -41,6 +41,11 @@ def my_context_processor():
 
 
 
-if __name__ == '__main__':
-    # app.run()
-    app.run(debug=False)
+# if __name__ == '__main__':
+#     # app.run()
+#     app.run(debug=False)
+
+# 移除 if __name__ == '__main__': 块
+# 在文件最后添加：
+application = app  # 重命名为 application
+
