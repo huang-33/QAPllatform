@@ -40,12 +40,13 @@ def my_context_processor():
     return {"user": g.user}
 
 
-
-# if __name__ == '__main__':
-#     # app.run()
+application = app
+if __name__ == '__main__':
+    # app.run()
+    application.run()
 #     app.run(debug=False)
 
 # 移除 if __name__ == '__main__': 块
 # 在文件最后添加：
-application = app  # 重命名为 application
+# application = app  # 重命名为 application
 
