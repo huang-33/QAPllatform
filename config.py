@@ -29,18 +29,31 @@ import os
 
 
 class Config:
-    # ... 其他配置 ...
-    STATIC_FOLDER = 'static'
+    # 解决Vercel上静态文件路径问题
+    if os.getenv('VERCEL'):
+        STATIC_FOLDER = os.path.join(os.getcwd(), 'static')
+    else:
+        STATIC_FOLDER = 'static'
+
     STATIC_URL_PATH = '/static'
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'binglianshang')
 
     # 使用环境变量配置数据库
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'mysql+pymysql://root:root@127.0.0.1:3306/QAPlatform?charset=utf8mb4')
-    DATABASE_URL = os.environ.get('POSTGRES_URL')  # Vercel 自动注入
-    SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace(
-        'postgres://', 'postgresql://'
-    )  # 适配 SQLAlchemy
+    # 处理数据库URL
+    DATABASE_URL = os.environ.get('POSTGRES_URL') or os.environ.get('DATABASE_URL')
+    # Vercel Postgres的特殊处理
+    if 'vercel-storage.com' in DATABASE_URL:
+        # 替换适配SQLAlchemy
+        SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace(
+            'postgres://',
+            'postgresql+psycopg2://',
+            1
+        ) + "?sslmode=require"
+    else:
+        SQLALCHEMY_DATABASE_URI = DATABASE_URL
+
 
     # 邮箱配置
     MAIL_SERVER = os.environ.get('MAIL_SERVER', "smtp.qq.com")

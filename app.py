@@ -2,10 +2,11 @@ from flask import Flask,session,g
 import config
 import os
 from exts import db,mail
-from models import UserModel
+from models import UserModel,QuestionModel,EmailCaptchModel
 from blueprints.qa import bp as qa_bp
 from blueprints.auth import bp as auth_bp
 from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__,
             instance_path=os.path.join(os.getcwd(), 'instance'),
@@ -43,27 +44,37 @@ def my_context_processor():
     return {"user": g.user}
 
 
-# 在注册blueprints之前添加以下代码：
+# 在注册blueprints之后添加以下代码：
 def check_and_init_db():
     from sqlalchemy import inspect
-    from models import QuestionModel
+    from sqlalchemy.exc import OperationalError
+    # 获取所有需要检查的模型
+    models_to_check = [UserModel, QuestionModel, EmailCaptchModel]
 
-    inspector = inspect(db.engine)
+    try:
+        with app.app_context():
+            # 手动创建数据库表
+            print("🔄 尝试创建数据库表...")
+            db.create_all()
+            print("✅ 数据库表创建完成")
 
-    if not inspector.has_table(QuestionModel.__tablename__):
-        print("🧰 检测到数据库为空，正在初始化表结构...")
-        db.create_all()
-        print("✅ 数据库表创建完成")
-        # 可选：添加初始数据
-        # user = UserModel(...)
-        # db.session.add(user)
-        # db.session.commit()
+            # 添加初始数据
+            if not UserModel.query.first():
+                print("🆕 创建默认用户...")
+                default_user = UserModel(username="管理员", email="admin@example.com",
+                                         password=generate_password_hash("admin123"))
+                db.session.add(default_user)
+                db.session.commit()
+                print("🆗 默认用户创建完成")
+
+    except OperationalError as e:
+        print(f"⚠️ 数据库连接错误: {e}")
+    except Exception as e:
+        print(f"🔴 数据库初始化失败: {e}")
 
 
-with app.app_context():
-    # 确保在应用上下文中执行
-    check_and_init_db()
-
+# 立即执行数据库初始化
+check_and_init_db()
 application = app
 
 
