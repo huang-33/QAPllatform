@@ -29,6 +29,10 @@ import os
 
 
 class Config:
+    # ... 其他配置 ...
+    STATIC_FOLDER = 'static'
+    STATIC_URL_PATH = '/static'
+
     SECRET_KEY = os.environ.get('SECRET_KEY', 'binglianshang')
 
     # 使用环境变量配置数据库

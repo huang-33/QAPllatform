@@ -7,7 +7,10 @@ from blueprints.qa import bp as qa_bp
 from blueprints.auth import bp as auth_bp
 from flask_migrate import Migrate
 
-app = Flask(__name__)
+app = Flask(__name__,
+            instance_path=os.path.join(os.getcwd(), 'instance'),
+            static_folder='static',
+            template_folder='templates')
 
 
 # 绑定配置
@@ -40,14 +43,29 @@ def my_context_processor():
     return {"user": g.user}
 
 
+# 在注册blueprints之前添加以下代码：
+def check_and_init_db():
+    from sqlalchemy import inspect
+    from models import QuestionModel
+
+    inspector = inspect(db.engine)
+
+    if not inspector.has_table(QuestionModel.__tablename__):
+        print("🧰 检测到数据库为空，正在初始化表结构...")
+        db.create_all()
+        print("✅ 数据库表创建完成")
+        # 可选：添加初始数据
+        # user = UserModel(...)
+        # db.session.add(user)
+        # db.session.commit()
+
+
+with app.app_context():
+    # 确保在应用上下文中执行
+    check_and_init_db()
 
 application = app
 
-@application.cli.command("initdb")
-def initdb_command():
-    """创建数据库表"""
-    db.create_all()
-    print("数据库表已创建完成")
 
 if __name__ == '__main__':
     # app.run()
