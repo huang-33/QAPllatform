@@ -40,7 +40,15 @@ def my_context_processor():
     return {"user": g.user}
 
 
+
 application = app
+
+@application.cli.command("initdb")
+def initdb_command():
+    """创建数据库表"""
+    db.create_all()
+    print("数据库表已创建完成")
+
 if __name__ == '__main__':
     # app.run()
     application.run()
